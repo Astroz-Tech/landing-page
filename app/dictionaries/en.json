@@ -1,0 +1,66 @@
+{
+  "hero": {
+    "title": "ASTROZ COMM.",
+    "subtitle": "We believe everyone has the right to help shape the future of technology.",
+    "tags": [
+      "TECHNOLOGY FOR EVERYONE",
+      "OPEN TO EVERYONE",
+      "COMMUNITY-DRIVEN",
+      "LEARN & CREATE"
+    ]
+  },
+  "mission": {
+    "title": "OUR MISSION",
+    "p1": "We believe change begins when someone dares to try something new. That is why ASTROZ exists to bring together technology, ideas, and the courage to create meaningful change. To us, technology is not merely a tool to make things faster or more efficient. Technology is a way to create opportunities, solve problems, and empower more people to take part in shaping the future.",
+    "quote": "\"Courage is not having the strength to keep going—it is continuing to move forward even when you have no strength left.\"",
+    "quoteAuthor": "— Napoleon Bonaparte"
+  },
+ "preview": {
+    "title": "VISUAL HIGHLIGHTS",
+    "subtitle": "A glimpse into our latest actions, collaborations, and moments.",
+    "drag": "SWIPE"
+  },
+  "cta": {
+    "title": "WE ARE LOOKING FORWARD TO HAVING YOU JOIN US.",
+    "button": "CONTACT US"
+  },
+
+  "projects": {
+    "title": "OUR PROJECTS",
+    "subtitle": "A collection of collaborative projects, system development, and social impact innovations.",
+    "role": "ROLE",
+    "visit": "VISIT PROJECT",
+    "techEmpty": "Tech stack: —",
+    "status": {
+      "Completed": "COMPLETED",
+      "In Progress": "IN PROGRESS"
+    }
+  },
+
+  "blog": {
+    "title": "OUR",
+    "highlight": "JOURNAL",
+    "subtitle": "Social action journals, technical notes, and field documentation."
+  },
+
+  "pillars": {
+    "title": "MOVEMENT PILLARS",
+    "desc": "We build technology as a space to learn, experiment, collaborate, and create real solutions. For ASTROZ, technology doesn't just belong to the best, but is open to anyone brave enough to try and co-create.",
+    "items": [
+      "TECH FOR EVERYONE",
+      "OPEN FOR ALL",
+      "COMMUNITY DRIVEN",
+      "LEARN & CREATE",
+      "DARE TO EXPERIMENT",
+      "DATA TRANSPARENCY",
+      "COLLABORATION"
+    ]
+  },
+  "photos": {
+    "title": "GALLERY",
+    "desc1": "Visual documentation.",
+    "descHighlight": "Hover",
+    "desc2": "over photos to reveal colors.",
+    "section1": "Explore the World"
+  }
+}

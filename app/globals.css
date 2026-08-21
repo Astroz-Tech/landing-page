@@ -2,157 +2,55 @@
 @plugin "@tailwindcss/typography";
 @import "./components/tweet.css";
 
-@custom-variant dark (&:where(.dark, .dark *));
+/* --- KONFIGURASI TEMA DINAMIS NEO-BRUTALISM --- */
+@theme {
+  --color-brutal-yellow: #FFD100;
+  --color-brutal-blue: #0055FF;
+  --color-brutal-red: #E1251B;
 
-::selection {
-  background-color: #47a3f3;
-  color: #fefefe;
+  --color-brutal-bg: var(--theme-bg);
+  --color-brutal-bg-alt: var(--theme-bg-alt); /* KHUSUS UNTUK MISI KAMI & FOOTER */
+  --color-brutal-surface: var(--theme-surface);
+  --color-brutal-border: var(--theme-border); /* KHUSUS GARIS & BAYANGAN */
+  --color-brutal-text: var(--theme-text);
+  --color-brutal-text-alt: var(--theme-text-alt);
+
+  /* Bayangan solid/keras */
+  --shadow-brutal: 4px 4px 0px 0px var(--theme-border);
+  --shadow-brutal-lg: 8px 8px 0px 0px var(--theme-border);
 }
 
-/* Light theme colors */
+/* ☀️ LIGHT MODE (Default Neo-Brutalism) */
 :root {
-  --sh-class: #2d5e9d;
-  --sh-identifier: #354150;
-  --sh-sign: #8996a3;
-  --sh-string: #007f7a;
-  --sh-keyword: #e02518;
-  --sh-comment: #a19595;
-  --sh-jsxliterals: #6266d1;
-  --sh-property: #e25a1c;
-  --sh-entity: #e25a1c;
+  --theme-bg: #F4F2EC;       /* Krem */
+  --theme-bg-alt: #000000;   /* Hitam (Untuk seksi Misi Kami & Footer) */
+  --theme-surface: #FFFFFF;  /* Putih */
+  --theme-border: #000000;   /* Hitam Pekat */
+  --theme-text: #000000;     /* Hitam */
+  --theme-text-alt: #FFFFFF; /* Putih (Teks di atas latar hitam) */
+  background-color: var(--theme-bg);
+  color: var(--theme-text);
 }
 
-/* Dark theme colors */
+/* 🌙 DARK MODE (Neo-Brutalism Tajam & Bersih) */
 .dark {
-  background-color: #111010;
-  --sh-class: #4c97f8;
-  --sh-identifier: white;
-  --sh-sign: #8996a3;
-  --sh-string: #0fa295;
-  --sh-keyword: #f47067;
-  --sh-comment: #a19595;
-  --sh-jsxliterals: #6266d1;
-  --sh-property: #e25a1c;
-  --sh-entity: #e25a1c;
+  --theme-bg: #0A0A0A;       /* Hitam Sangat Gelap (Nyaman & Premium) */
+  --theme-bg-alt: #171717;   /* Abu-abu Sangat Gelap (Membedakan seksi tanpa terlihat kusam) */
+  --theme-surface: #000000;  /* Hitam Murni (Agar kartu menonjol) */
+  --theme-border: #E5E5E5;   /* Putih Tegas (Untuk border dan bayangan agar kontras) */
+  --theme-text: #FAFAFA;     /* Putih Terang */
+  --theme-text-alt: #FAFAFA; /* Putih Terang */
+  background-color: var(--theme-bg);
+  color: var(--theme-text);
 }
 
-html {
-  min-width: 360px;
-}
+/* --- Pengaturan Global --- */
+html { min-width: 360px; }
+body { background-color: var(--color-brutal-bg); color: var(--color-brutal-text); }
+::selection { background-color: var(--color-brutal-blue); color: #fefefe; }
 
-.prose {
-  @apply text-[#000000] dark:text-[#FFFFFF];
-}
+/* Sembunyikan scrollbar untuk navigasi mobile */
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-.prose .anchor {
-  @apply absolute invisible no-underline;
-  margin-left: -1em;
-  padding-right: 0.5em;
-  width: 80%;
-  max-width: 700px;
-  cursor: pointer;
-}
-
-.anchor:hover {
-  @apply visible;
-}
-
-.prose a {
-  @apply transition-all decoration-neutral-400 dark:decoration-neutral-600 underline-offset-2 decoration-[0.1em] font-normal text-[#000000] dark:text-[#FFFFFF];
-}
-
-.prose a:hover {
-  @apply dark:decoration-neutral-400 decoration-neutral-600;
-}
-
-.prose .anchor:after {
-  @apply text-neutral-300 dark:text-neutral-700;
-  content: "#";
-}
-
-.prose *:hover > .anchor {
-  @apply visible;
-}
-
-.prose pre {
-  @apply bg-[#F7F7F7] dark:bg-[#181818] rounded-lg overflow-x-auto;
-}
-
-.prose code {
-  @apply px-1 py-0.5 rounded-lg;
-}
-
-.prose pre code {
-  @apply p-0;
-  border: initial;
-  line-height: 1.5;
-}
-
-.prose code span {
-  @apply font-medium;
-}
-
-.prose img {
-  /* Don't apply styles to next/image */
-  @apply m-0;
-}
-
-.prose h2,
-h3,
-h4,
-h5,
-h6 {
-  @apply font-medium;
-}
-
-.prose strong {
-  @apply font-medium;
-}
-
-.prose > :first-child {
-  /* Override removing top margin, causing layout shift */
-  margin-top: 1.25em;
-  margin-bottom: 1.25em;
-}
-
-.prose-quoteless blockquote p:first-of-type::before,
-.prose-quoteless blockquote p:first-of-type::after {
-  content: none;
-}
-
-pre::-webkit-scrollbar {
-  display: none;
-}
-
-pre {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-}
-
-/* Remove Safari input shadow on mobile */
-input[type="text"],
-input[type="email"] {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-}
-
-.prose .tweet a {
-  text-decoration: inherit;
-  font-weight: 500;
-}
-
-table {
-  display: block;
-  max-width: fit-content;
-  overflow-x: auto;
-  white-space: nowrap;
-}
-
-.prose .callout > p {
-  margin: 0;
-}
-
-.title {
-  text-wrap: balance;
-}
+/* --- (Biarkan sisa kode .prose Anda tetap di bawah ini) --- */
