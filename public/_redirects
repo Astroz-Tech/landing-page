@@ -1,4 +1,7 @@
-/ /en 302
+/en / 301
+/en/* /:splat 301
+/id / 301
+/id/* / 301
 /rss /rss.xml 301
 /atom /atom.xml 301
 /feed /rss.xml 301
