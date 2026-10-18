@@ -25,22 +25,23 @@ astro.config.mjs        site, i18n, fonts, Tailwind, $lib aliases, sitemap
 components.json         shadcn-svelte aliases
 src/
   components/atoms/     mdx-a, mdx-img, code-block
-  components/molecules/ section-header, blog-row, project-card, theme-toggle
+  components/molecules/ section-header, blog-row, project-card, social-card, theme-toggle
   components/organisms/ site-header, site-footer, mobile-nav
   components/ui/        shadcn-svelte primitives
   components/mdx-components.ts
   content.config.ts     collection schemas
   i18n/{en,id}.json     dictionaries, identical key sets
   layouts/              base-layout.astro, post-layout.astro (templates)
-  lib/                  site, blog, projects, feed, i18n-links, og-font,
+  lib/                  site, blog, projects, social, feed, i18n-links, og-font,
                         html-entities, utils
   pages/                routes, feeds, robots, OG images
   styles/global.css     design tokens
 public/
   _redirects            Cloudflare redirects
-  hero.png              home hero image
   blog/{en,id}/         blog entries (MDX; may be empty)
   projects/{en,id}/     project entries (MDX)
+  social/{en,id}/       social feed entries (MDX)
+  social/images/        social post thumbnails
   fonts/                Plus Jakarta Sans TTFs for OG images
 ```
 

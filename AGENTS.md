@@ -74,12 +74,12 @@ src/
   components/
     atoms/                  # single elements: mdx-a, mdx-img, code-block
     molecules/              # composed units: section-header, blog-row, project-card,
-                            # theme-toggle
+                            # social-card, theme-toggle
     organisms/              # page regions: site-header, site-footer, mobile-nav
     ui/                     # vendored shadcn-svelte primitives; do not hand-edit
     mdx-components.ts       # MDX component registry
   layouts/                  # templates: base-layout, post-layout
-  lib/                      # site, blog, projects, feed, i18n-links, og-font,
+  lib/                      # site, blog, projects, social, feed, i18n-links, og-font,
                             # html-entities, utils
   pages/                    # routes, feeds, robots, OG endpoint
   i18n/{en,id}.json
@@ -92,6 +92,8 @@ public/
   fonts/                    # vendored Plus Jakarta Sans TTFs (400, 600) for OG rendering
   blog/{en,id}/*.mdx        # blog entries (may be empty)
   projects/{en,id}/*.mdx    # project entries
+  social/{en,id}/*.mdx      # social feed entries
+  social/images/*           # social post thumbnails
 ```
 
 Routes:
@@ -120,12 +122,13 @@ Rules:
   `src/pages`. Do not add a second component tree.
 - `ui/` is the only vendored tree. Do not restructure or hand-edit it. Add primitives with
   `bunx shadcn-svelte@latest add <component>`.
-- Blog and project MDX are locale-scoped by folder: `public/blog/{en,id}/<slug>.mdx` and
-  `public/projects/{en,id}/<slug>.mdx`. An entry with no translation does not appear in that
-  locale's index; never render untranslated content under a translated URL.
+- Blog, project, and social MDX are locale-scoped by folder: `public/blog/{en,id}/<slug>.mdx`,
+  `public/projects/{en,id}/<slug>.mdx`, and `public/social/{en,id}/<slug>.mdx`. An entry with no
+  translation does not appear in that locale's index; never render untranslated content under a
+  translated URL.
 - `public/` is copied verbatim, so MDX files are also reachable at
-  `/blog/<lang>/<slug>.mdx` and `/projects/<lang>/<slug>.mdx`. Frontmatter and bodies are public;
-  never put secrets in them.
+  `/blog/<lang>/<slug>.mdx`, `/projects/<lang>/<slug>.mdx`, and `/social/<lang>/<slug>.mdx`.
+  Frontmatter and bodies are public; never put secrets in them.
 - Delete a legacy file when its replacement lands. No parallel implementations.
 
 `public/_redirects` contains exactly:
@@ -177,13 +180,17 @@ Rules:
 
 ## 8. Content
 
-- `src/content.config.ts` defines `blog` and `projects` with `glob()` loaders and Zod schemas.
-  Invalid frontmatter fails the build.
+- `src/content.config.ts` defines `blog`, `projects`, and `social` with `glob()` loaders and Zod
+  schemas. Invalid frontmatter fails the build.
 - Blog frontmatter: `title`, `summary`, `publishedAt` (ISO date), `draft` (optional boolean,
   default `false`). The blog collection may be empty; `/blog` renders its empty panel instead.
 - Project frontmatter: `title`, `summary`, `role`, `year` (integer), `stack` (string array,
   default `[]`), `url` (optional, `https://` only). Projects have no detail route: the index card
   is the whole presentation, linking out to `url` when it exists.
+- Social frontmatter: `title`, `summary`, `platform` (`x`, `github`, `instagram`, `linkedin`),
+  `url` (`https://` only), `image` (`/social/images/...` only), `publishedAt` (ISO date), `draft`
+  (optional boolean, default `false`). Rendered as cards on the home page; the home section is
+  omitted for a locale with no entries.
 - Delete a legacy file when its replacement lands. No parallel implementations.
 
 ## 9. Accessibility, SEO, performance

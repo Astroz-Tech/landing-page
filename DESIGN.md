@@ -118,14 +118,16 @@ empty. Adding an MDX file under `public/blog/{en,id}/` produces entries with no 
 **Desktop** — a three-column grid, `md:grid-cols-[1fr_auto_1fr]`, so the link group is centred on
 the bar rather than on the space between the wordmark and the controls.
 
-- Left: `Astroz` wordmark, links to the locale home.
+- Left: `AZ` logomark, links to the locale home. `/assets/logo-navy.png` (navy ink) in light
+  mode, `/assets/logo-white.png` (foreground ink) in dark mode; swapped with `dark:hidden` /
+  `dark:block`, no JavaScript. 32px tall, transparent background, `alt="Astroz"`.
 - Centre: `Home`, `Blog`, `Projects` — in that order.
 - Right: language toggle (`EN` / `ID`), theme toggle, `Donate` button (`mailto:`).
 - Sticky, 64px tall, `bg-background/80`, `backdrop-blur`, 1px bottom border.
 - Active route: `text-foreground` with a 2px `primary` underline that wipes in from the left.
 - Inactive: `text-muted-foreground`.
 
-**Mobile** — wordmark, language toggle, theme toggle, menu button. The menu opens the shadcn
+**Mobile** — logomark, language toggle, theme toggle, menu button. The menu opens the shadcn
 `Sheet` from the right with large sans links and the `Donate` button at the bottom. Focus is
 trapped while open; `Esc` closes.
 
@@ -147,7 +149,7 @@ trapped while open; `Esc` closes.
    neutral.
 3. **Hairlines over shadows.** Cards are defined by 1px borders, not elevation.
 4. **Type carries hierarchy.** Weight and scale do the work; no colored section bands.
-5. **Images are documentary.** The hero image is the community's own artwork. No stock photography.
+5. **Images are documentary.** Any image is the community's own work. No stock photography.
 6. **Motion explains.** 150–250ms transitions on hover, focus, and entrance. No parallax, no
    infinite loops, no scroll-triggered reveals that gate content behind JavaScript.
 7. **Dark mode is first-class.** Every token has a dark value.
@@ -265,8 +267,7 @@ Every color, radius, and font in the UI resolves through the shadcn semantic tok
 
 **Grid behavior**
 
-- Hero: two equal columns at `lg` (`lg:grid-cols-2`, `gap-16`), copy left and image right,
-  vertically centred. Single column below `lg`.
+- Hero: single column; copy capped by the `48ch` lead measure. No image column.
 - Mission: single measure column; blockquote follows the body at `65ch`.
 - Pillars: wrapping tag row.
 - Projects: 2 columns `md`, 3 columns `xl`.
@@ -385,10 +386,11 @@ rounded-lg border border-border bg-card p-5 md:p-6
 
 | # | Section | Anatomy |
 |---|---|---|
-| 1 | Hero | Two-column grid: h1, lead, four tags / hero image |
-| 2 | Mission | `border-y` band: h2, two paragraphs, blockquote |
-| 3 | Movement pillars | Section header, then seven badges |
-| 4 | Contact CTA | Centred card: h2, then the contact button |
+| 1 | Hero | Single column: h1, lead, four tags |
+| 2 | Social feed | Section header, then a card grid from the `social` collection |
+| 3 | Mission | `border-y` band: h2, two paragraphs, blockquote |
+| 4 | Movement pillars | Section header, then seven badges |
+| 5 | Contact CTA | Centred card: h2, then the contact button |
 
 **Hero**
 
@@ -396,9 +398,22 @@ rounded-lg border border-border bg-card p-5 md:p-6
 - Lead: `We believe everyone has the right to help shape the future of technology.`
 - Four tags, wrapping: `TECHNOLOGY FOR EVERYONE`, `OPEN TO EVERYONE`, `COMMUNITY-DRIVEN`,
   `LEARN & CREATE`. Rendered as bordered mono chips, `min-h-11`, `rounded-md`.
-- Image: `/hero.png`, 736×736, `alt` `Kegiatan Astroz`, `loading="eager"`, `decoding="async"`,
-  `rounded-lg border border-border`. Fills its column at `lg`, caps at `max-w-md` below it.
-- No eyebrow above the h1 and no action buttons: the tags are the only hero metadata.
+- No image, no eyebrow above the h1, and no action buttons: the tags are the only hero metadata.
+
+**Social feed**
+
+- H2 `FROM THE FEED`; intro paragraph. Section header reuses `SectionHeader`, no action link.
+- Cards come from the `social` collection for the current locale, newest first, drafts excluded.
+  The whole section is omitted when that locale has no entries.
+- Grid `md:grid-cols-2 xl:grid-cols-3`, `gap-6`, equal-height cards.
+- Card: `<a>` to `url`, `target="_blank"`, `rel="noopener noreferrer"`, `rounded-lg border
+  border-border bg-card`, hover lift −2px plus `border-primary/40`, matching `project-card`.
+- Thumbnail frame: `aspect-[16/10]`, `object-cover`, `loading="lazy"`, `decoding="async"`,
+  `alt=""` (the title carries the meaning), hairline under the frame.
+- Meta row: platform icon + platform name + `·` + date, mono 11px uppercase
+  `tracking-[0.12em]`, `text-muted-foreground`.
+- Title `h3` at `text-xl font-semibold`; description `text-sm text-muted-foreground`, clamped to
+  two lines; `ArrowUpRight` sits bottom-right, no label.
 
 **Mission**
 
@@ -409,7 +424,7 @@ rounded-lg border border-border bg-card p-5 md:p-6
 
 **Movement pillars**
 
-- Eyebrow `Astroz`; H2 `MOVEMENT PILLARS`; intro paragraph.
+- H2 `MOVEMENT PILLARS`; intro paragraph.
 - Seven badges: `TECH FOR EVERYONE`, `OPEN FOR ALL`, `COMMUNITY DRIVEN`, `LEARN & CREATE`,
   `DARE TO EXPERIMENT`, `DATA TRANSPARENCY`, `COLLABORATION`.
 
@@ -423,7 +438,7 @@ rounded-lg border border-border bg-card p-5 md:p-6
 
 ### 9.2 Blog index (`/[lang]/blog`)
 
-- Eyebrow `Astroz`, H1 `OUR JOURNAL`, intro paragraph.
+- H1 `OUR JOURNAL`, intro paragraph.
 - Rows from `getBlogPosts(lang)`, newest first, separated by hairlines.
 - Empty state when the collection has no entries: dashed panel with `The first dispatch is being
   written.`, a body line, and `Back to home`. The panel is required; do not hide the section.
@@ -441,7 +456,7 @@ rounded-lg border border-border bg-card p-5 md:p-6
 
 ### 9.4 Projects index (`/[lang]/projects`)
 
-- Eyebrow `Astroz`, H1 `OUR PROJECTS`, intro paragraph.
+- H1 `OUR PROJECTS`, intro paragraph.
 - Grid: 2 columns `md`, 3 columns `xl`, `gap-6`.
 - Cards from `getProjects(lang)`, sorted by `year` descending then title ascending.
 - No filters, no status badges, no detail route.
@@ -480,7 +495,8 @@ meta.suffix, meta.home.title, meta.home.description
 meta.blog.title, meta.blog.description
 meta.projects.title, meta.projects.description
 meta.notFound.title, meta.notFound.description
-home.hero.title, home.hero.lead, home.hero.imageAlt
+home.hero.title, home.hero.lead
+home.social.title, home.social.intro
 home.tags.everyone, home.tags.open, home.tags.community, home.tags.learn
 home.mission.title, home.mission.body, home.mission.body2
 home.mission.quote, home.mission.quoteBy
@@ -543,7 +559,7 @@ Target: WCAG 2.2 AA.
   scoped to the attribute it would have set. It is the only script outside the two islands.
 - Fonts: Plus Jakarta Sans (400/500/600) and Geist Mono (500) via the Astro Fonts API, latin
   subset, preloaded sans.
-- Images: explicit `width`/`height`, `loading="eager"` on the hero, `decoding="async"`.
+- Images: explicit `width`/`height`, `decoding="async"`; below-the-fold media lazy-loads.
 - Code highlighting runs at build time.
 - Targets: LCP < 2.0s on throttled 4G, CLS < 0.05, INP < 200ms.
 - No layout shift when the theme toggle mounts; it reserves its 44px box.
@@ -557,13 +573,13 @@ src/
   components/
     atoms/        code-block.astro, mdx-a.astro, mdx-img.astro, social-icon.astro
     molecules/    blog-row.astro, project-card.astro, section-header.astro,
-                  theme-toggle.svelte
+                  social-card.astro, theme-toggle.svelte
     organisms/    site-header.astro, site-footer.astro, mobile-nav.svelte
     ui/           vendored shadcn-svelte primitives
     mdx-components.ts
   layouts/        base-layout.astro, post-layout.astro
-  lib/            site.ts, blog.ts, projects.ts, feed.ts, i18n-links.ts, og-font.ts,
-                  html-entities.ts, utils.ts
+  lib/            site.ts, blog.ts, projects.ts, social.ts, feed.ts, i18n-links.ts,
+                  og-font.ts, html-entities.ts, utils.ts
   pages/
     404.astro
     [lang]/index.astro
@@ -576,9 +592,9 @@ src/
   content.config.ts
   i18n/{en,id}.json, i18n/index.ts
 public/
-  hero.png
   blog/{en,id}/*.mdx
   projects/{en,id}/*.mdx
+  social/{en,id}/*.mdx, social/images/*
   fonts/, opengraph-image.png, _redirects
 ```
 
@@ -587,11 +603,11 @@ public/
 ## 15. Acceptance checklist
 
 - [ ] Three top-level routes: Home, Blog, Projects. No Photos, no Donate route, no project detail.
-- [ ] Home renders hero, mission, pillars, and CTA in that order, in both locales.
-- [ ] The hero is a two-column grid at `lg` and stacks cleanly at 390px.
+- [ ] Home renders hero, social feed, mission, pillars, and CTA in that order, in both locales.
+- [ ] The hero is a single column and reads cleanly at 390px.
 - [ ] Every user-visible string comes from the dictionaries; key sets are identical.
 - [ ] No copy outside the restored original text and the specified UI strings.
-- [ ] No "Astroz Research", no `RESEARCH` descriptor, no social highlights shelf, no research areas.
+- [ ] No "Astroz Research", no `RESEARCH` descriptor, no research areas.
 - [ ] Blog index shows the empty panel when the collection is empty.
 - [ ] Project cards show year, title, role, summary, stack, and destination.
 - [ ] Footer shows the wordmark, copyright, and four social icon links.
@@ -611,5 +627,6 @@ public/
 - **Blog:** ships with zero entries. The route and MDX pipeline stay wired.
 - **Projects:** one entry, `Astro-Search`. No detail pages; the card links out.
 - **Meta descriptions:** the shipped Indonesian strings, verbatim.
-- **Imagery:** the community's own hero artwork only. No stock photography.
+- **Imagery:** none on the home page. Any future image is the community's own work; no stock
+  photography.
 - **Metrics:** none until there is a verifiable source.
