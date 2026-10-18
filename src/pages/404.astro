@@ -1,0 +1,31 @@
+---
+import BaseLayout from "../layouts/base-layout.astro";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { buttonVariants } from "$lib/components/ui/button/index";
+import { useTranslations } from "../i18n";
+
+const lang = "en";
+const t = useTranslations(lang);
+---
+
+<BaseLayout
+  lang={lang}
+  title={t("meta.notFound.title")}
+  description={t("meta.notFound.description")}
+>
+  <section class="mx-auto max-w-6xl px-6 py-24 md:px-8">
+    <p class="reveal font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-primary">404</p>
+    <h1
+      class="reveal mt-4 font-semibold text-[clamp(2.5rem,5vw,4rem)] leading-[1.05] tracking-[-0.03em]"
+    >
+      {t("notFound.title")}
+    </h1>
+    <p class="reveal mt-4 max-w-xl text-muted-foreground">{t("notFound.body")}</p>
+    <a
+      href={getRelativeLocaleUrl(lang)}
+      class={buttonVariants({ size: "lg", class: "reveal mt-8 font-semibold" })}
+    >
+      {t("notFound.action")}
+    </a>
+  </section>
+</BaseLayout>

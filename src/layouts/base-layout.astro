@@ -1,0 +1,136 @@
+---
+import { Font } from "astro:assets";
+import "../styles/global.css";
+import SiteHeader from "../components/organisms/site-header.astro";
+import SiteFooter from "../components/organisms/site-footer.astro";
+import { useTranslations, type Lang } from "../i18n";
+import { getLocaleSwitchHref } from "../lib/i18n-links";
+import { site } from "../lib/site";
+
+interface Props {
+  lang: Lang;
+  title: string;
+  description: string;
+  ogImage?: string;
+  type?: "website" | "article";
+  jsonLd?: Record<string, unknown>;
+}
+
+const { lang, title, description, ogImage = "/opengraph-image.png", type = "website", jsonLd } =
+  Astro.props;
+const t = useTranslations(lang);
+const siteUrl = Astro.site;
+if (!siteUrl) throw new Error("Set `site` in astro.config.mjs");
+
+const canonical = new URL(Astro.url.pathname, siteUrl).href;
+const enHref = new URL(getLocaleSwitchHref(Astro.url.pathname, "en"), siteUrl).href;
+const idHref = new URL(getLocaleSwitchHref(Astro.url.pathname, "id"), siteUrl).href;
+const ogUrl = new URL(ogImage, siteUrl).href;
+---
+
+<!doctype html>
+<html lang={lang} class="scroll-smooth">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="en" href={enHref} />
+    <link rel="alternate" hreflang="id" href={idHref} />
+    <link rel="alternate" hreflang="x-default" href={enHref} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta property="og:type" content={type} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogUrl} />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:locale" content={lang === "en" ? "en_US" : "id_ID"} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogUrl} />
+    <Font cssVariable="--font-jakarta-sans" preload />
+    <Font cssVariable="--font-geist-mono" />
+    <script is:inline>
+      (() => {
+        const stored = localStorage.getItem("theme");
+        const dark = stored
+          ? stored === "dark"
+          : window.matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.classList.toggle("dark", dark);
+        document.documentElement.style.colorScheme = dark ? "dark" : "light";
+      })();
+    </script>
+    <script is:inline>
+      /*
+       * Scroll reveal. Runs before paint, so nothing flashes visible and then
+       * jumps to hidden.
+       *
+       * Each element animates once, the first time it enters the viewport, and
+       * is then unobserved: scrolling back up does not replay it.
+       *
+       * Elements already in the viewport when the page opens are the page's
+       * entrance: they are given an increasing --reveal-delay so the first
+       * screen performs a visible top-to-bottom cascade instead of appearing
+       * all at once. Everything below the fold animates as it is scrolled in.
+       *
+       * The hidden state is scoped to html[data-reveal="js"], which this script
+       * sets, so if it never runs (no JS, reduced motion, no observer) nothing
+       * is hidden.
+       */
+      (() => {
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+        if (!("IntersectionObserver" in window)) return;
+
+        document.documentElement.dataset.reveal = "js";
+
+        const observer = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (!entry.isIntersecting) continue;
+              entry.target.classList.add("is-revealed");
+              observer.unobserve(entry.target);
+            }
+          },
+          { threshold: 0.15, rootMargin: "0px 0px -8% 0px" },
+        );
+
+        const start = () => {
+          const elements = [...document.querySelectorAll(".reveal")];
+          const viewport = window.innerHeight;
+          let seen = 0;
+
+          for (const el of elements) {
+            const box = el.getBoundingClientRect();
+            if (box.top < viewport * 0.9 && box.bottom > 0) {
+              el.style.setProperty("--reveal-delay", `${120 + Math.min(seen, 5) * 90}ms`);
+              seen += 1;
+            }
+
+            observer.observe(el);
+          }
+        };
+
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", start, { once: true });
+        } else {
+          start();
+        }
+      })();
+    </script>
+    {jsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />}
+  </head>
+  <body class="min-h-screen bg-background font-sans text-foreground antialiased">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-background focus:inline-flex focus:min-h-11 focus:items-center focus:px-4 focus:ring-2 focus:ring-ring"
+    >
+      {t("a11y.skip")}
+    </a>
+    <SiteHeader lang={lang} />
+    <main id="main" class="min-h-[60vh]"><slot /></main>
+    <SiteFooter lang={lang} />
+  </body>
+</html>

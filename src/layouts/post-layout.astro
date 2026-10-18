@@ -1,0 +1,41 @@
+---
+import BaseLayout from "./base-layout.astro";
+import { useTranslations, type Lang } from "../i18n";
+import { formatDate, type BlogEntry } from "../lib/blog";
+
+interface Props {
+  lang: Lang;
+  entry: BlogEntry;
+  jsonLd: Record<string, unknown>;
+}
+
+const { lang, entry, jsonLd } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<BaseLayout
+  lang={lang}
+  title={`${entry.data.title}${t("meta.suffix")}`}
+  description={entry.data.summary}
+  ogImage={`/og/blog/${lang}.png`}
+  type="article"
+  jsonLd={jsonLd}
+>
+  <article class="mx-auto max-w-3xl px-6 py-16 md:px-8 md:py-24">
+    <time
+      class="reveal font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-muted-foreground"
+      datetime={entry.data.publishedAt.toISOString()}
+    >
+      {formatDate(entry.data.publishedAt, lang)}
+    </time>
+    <h1
+      class="reveal mt-6 font-semibold text-[clamp(2.5rem,5vw,4rem)] leading-[1.05] tracking-[-0.03em] text-balance"
+    >
+      {entry.data.title}
+    </h1>
+    <hr class="my-8 border-border" />
+    <div class="prose reveal prose-neutral dark:prose-invert max-w-[65ch]">
+      <slot />
+    </div>
+  </article>
+</BaseLayout>

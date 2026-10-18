@@ -1,0 +1,6 @@
+/ /en 302
+/rss /rss.xml 301
+/atom /atom.xml 301
+/feed /rss.xml 301
+/json /feed.json 301
+/sitemap.xml /sitemap-index.xml 301

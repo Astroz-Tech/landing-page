@@ -1,0 +1,43 @@
+---
+import { getCollection, render } from "astro:content";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import PostLayout from "../../../layouts/post-layout.astro";
+import { mdxComponents } from "../../../components/mdx-components";
+import { blogEntryLang, blogEntrySlug, type BlogEntry } from "../../../lib/blog";
+import { site } from "../../../lib/site";
+
+interface Props {
+  entry: BlogEntry;
+}
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
+  return posts.map((entry) => ({
+    params: { lang: blogEntryLang(entry), slug: blogEntrySlug(entry) },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const lang = blogEntryLang(entry);
+const { Content } = await render(entry);
+const siteUrl = Astro.site;
+if (!siteUrl) throw new Error("Set `site` in astro.config.mjs");
+const canonical = new URL(getRelativeLocaleUrl(lang, `blog/${blogEntrySlug(entry)}`), siteUrl).href;
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: entry.data.title,
+  description: entry.data.summary,
+  datePublished: entry.data.publishedAt.toISOString(),
+  inLanguage: lang,
+  mainEntityOfPage: canonical,
+  author: { "@type": "Organization", name: site.name },
+  publisher: { "@type": "Organization", name: site.name },
+};
+---
+
+<PostLayout lang={lang} entry={entry} jsonLd={jsonLd}>
+  <Content components={mdxComponents} />
+</PostLayout>

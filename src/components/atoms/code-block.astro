@@ -1,0 +1,23 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { highlight } from "sugar-high";
+import { lang as normalizeLang } from "sugar-high/lang";
+import { decodeHtmlEntities } from "../../lib/html-entities";
+
+interface Props extends HTMLAttributes<"code"> {
+  className?: string;
+}
+
+const { class: classProp, className, ...props } = Astro.props;
+const classNameValue = classProp ?? className;
+const raw = await Astro.slots.render("default");
+const decoded = decodeHtmlEntities(raw);
+const language =
+  typeof classNameValue === "string"
+    ? classNameValue.match(/language-([\w-]+)/)?.[1]
+    : undefined;
+const normalized = language ? normalizeLang(language) : undefined;
+const html = normalized ? highlight(decoded, { lang: normalized }) : decoded;
+---
+
+<code class={classNameValue} {...props} set:html={html} />
