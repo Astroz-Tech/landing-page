@@ -1,0 +1,36 @@
+---
+import { getCollection, render } from "astro:content";
+import PostLayout from "../../layouts/post-layout.astro";
+import { mdxComponents } from "../../components/mdx-components";
+import type { BlogEntry } from "../../lib/blog";
+import { blogPostingJsonLd } from "../../lib/json-ld";
+
+interface Props {
+  entry: BlogEntry;
+}
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
+  return posts.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const siteUrl = Astro.site;
+if (!siteUrl) throw new Error("Set `site` in astro.config.mjs");
+const canonical = new URL(`/blog/${entry.id}/`, siteUrl).href;
+
+const jsonLd = blogPostingJsonLd({
+  title: entry.data.title,
+  summary: entry.data.summary,
+  publishedAt: entry.data.publishedAt,
+  canonical,
+});
+---
+
+<PostLayout entry={entry} jsonLd={jsonLd}>
+  <Content components={mdxComponents} />
+</PostLayout>

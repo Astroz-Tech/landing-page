@@ -1,15 +1,7 @@
 ---
-import { getRelativeLocaleUrl } from "astro:i18n";
 import SocialIcon from "../atoms/social-icon.astro";
 import { site } from "../../lib/site";
-import { useTranslations, type Lang } from "../../i18n";
 
-interface Props {
-  lang: Lang;
-}
-
-const { lang } = Astro.props;
-const t = useTranslations(lang);
 const year = new Date().getFullYear();
 const social = [
   { name: "x", href: site.social.x, label: "X" },
@@ -25,13 +17,13 @@ const social = [
   >
     <div>
       <a
-        href={getRelativeLocaleUrl(lang)}
+        href="/"
         class="inline-flex min-h-11 items-center font-semibold text-xl tracking-tight"
       >
-        {t("brand.name")}
+        Astroz
       </a>
       <p class="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
-        {t("footer.rights").replace("{year}", String(year))}
+        {`© ${year} ALL RIGHTS RESERVED.`}
       </p>
     </div>
     <ul class="flex items-center gap-1">

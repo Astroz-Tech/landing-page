@@ -2,7 +2,11 @@
   import { onMount } from "svelte";
   import { Moon, Sun } from "@lucide/svelte";
 
-  let { label }: { label: string } = $props();
+  interface Props {
+    label: string;
+  }
+
+  let { label }: Props = $props();
 
   function toggle() {
     const root = document.documentElement;

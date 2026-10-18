@@ -1,25 +1,22 @@
 ---
-import { getRelativeLocaleUrl } from "astro:i18n";
-import { blogEntrySlug, formatDate, type BlogEntry } from "../../lib/blog";
-import type { Lang } from "../../i18n";
+import { formatDate, type BlogEntry } from "../../lib/blog";
 
 interface Props {
   entry: BlogEntry;
-  lang: Lang;
   heading?: "h2" | "h3";
 }
 
-const { entry, lang, heading = "h3" } = Astro.props;
+const { entry, heading = "h3" } = Astro.props;
 const Heading = heading;
-const href = getRelativeLocaleUrl(lang, `blog/${blogEntrySlug(entry)}`);
+const href = `/blog/${entry.id}/`;
 ---
 
-<article class="group grid gap-3 border-b border-border py-6 md:grid-cols-[160px_1fr] md:gap-8">
+<article class="group grid items-baseline gap-3 border-b border-border py-6 md:grid-cols-[160px_1fr] md:items-center md:gap-8">
   <time
     class="font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-muted-foreground transition-colors duration-200 group-hover:text-foreground"
     datetime={entry.data.publishedAt.toISOString()}
   >
-    {formatDate(entry.data.publishedAt, lang)}
+    {formatDate(entry.data.publishedAt)}
   </time>
   <Heading class="font-semibold text-2xl leading-tight md:text-3xl">
     <a

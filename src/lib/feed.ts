@@ -1,7 +1,6 @@
 import { Feed } from "feed";
-import { getRelativeLocaleUrl } from "astro:i18n";
 import { site } from "./site";
-import { blogEntrySlug, getBlogPosts } from "./blog";
+import { getBlogPosts } from "./blog";
 
 export async function buildFeed(baseUrl: URL) {
   const feed = new Feed({
@@ -18,8 +17,8 @@ export async function buildFeed(baseUrl: URL) {
     },
   });
 
-  for (const post of await getBlogPosts("en")) {
-    const link = new URL(getRelativeLocaleUrl("en", `blog/${blogEntrySlug(post)}`), baseUrl).href;
+  for (const post of await getBlogPosts()) {
+    const link = new URL(`/blog/${post.id}/`, baseUrl).href;
     feed.addItem({
       title: post.data.title,
       id: link,

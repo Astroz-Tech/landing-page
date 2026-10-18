@@ -1,0 +1,34 @@
+---
+import BaseLayout from "../../layouts/base-layout.astro";
+import ProjectCard from "../../components/molecules/project-card.astro";
+import { getProjects } from "../../lib/projects";
+
+const projects = await getProjects();
+---
+
+<BaseLayout
+  title="Projects | Astroz"
+  description="Open source projects from Astroz."
+  ogImage="/og/projects.png"
+>
+  <section class="mx-auto max-w-6xl px-6 py-16 md:px-8 md:py-24">
+    <h1
+      class="reveal font-semibold text-[clamp(2.5rem,5vw,4rem)] leading-[1.05] tracking-[-0.03em]"
+    >
+      OUR PROJECTS
+    </h1>
+    <p class="reveal mt-4 max-w-2xl text-lg text-muted-foreground text-pretty">
+      Things we have built and put online. Each one links to its source.
+    </p>
+
+    <div class="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+      {
+        projects.map((entry, index) => (
+          <div class:list={["reveal", index > 3 ? "reveal-3" : index > 1 ? "reveal-2" : ""]}>
+            <ProjectCard entry={entry} heading="h2" />
+          </div>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>

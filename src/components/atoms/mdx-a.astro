@@ -1,6 +1,5 @@
 ---
 import type { HTMLAttributes } from "astro/types";
-import { defaultLang, isLang, useTranslations } from "../../i18n";
 
 interface Props extends HTMLAttributes<"a"> {
   href?: string;
@@ -8,9 +7,6 @@ interface Props extends HTMLAttributes<"a"> {
 
 const { href = "", ...props } = Astro.props;
 const external = /^https?:\/\//.test(href);
-const currentLocale = Astro.currentLocale;
-const lang = isLang(currentLocale) ? currentLocale : defaultLang;
-const t = useTranslations(lang);
 ---
 
 <a
@@ -20,5 +16,5 @@ const t = useTranslations(lang);
   rel={external ? "noopener noreferrer" : undefined}
 >
   <slot />
-  {external && <span class="sr-only"> ({t("a11y.newTab")})</span>}
+  {external && <span class="sr-only"> (opens in a new tab)</span>}
 </a>

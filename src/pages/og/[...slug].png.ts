@@ -3,33 +3,26 @@ import satori from "satori";
 import { html } from "satori-html";
 import { Resvg } from "@resvg/resvg-js";
 import { loadJakarta } from "../../lib/og-font";
-import { locales, useTranslations } from "../../i18n";
 
 interface OgProps {
   title: string;
   eyebrow: string;
 }
 
-export async function getStaticPaths() {
-  const paths: { params: { slug: string }; props: { title: string; eyebrow: string } }[] = [];
+interface OgPath {
+  params: { slug: string };
+  props: OgProps;
+}
 
-  for (const lang of locales) {
-    const t = useTranslations(lang);
-    paths.push({
-      params: { slug: `home/${lang}` },
-      props: { title: t("home.hero.title"), eyebrow: t("brand.name") },
-    });
-    paths.push({
-      params: { slug: `blog/${lang}` },
-      props: { title: t("blog.title"), eyebrow: t("brand.name") },
-    });
-    paths.push({
-      params: { slug: `projects/${lang}` },
-      props: { title: t("projects.title"), eyebrow: t("brand.name") },
-    });
-  }
-
-  return paths;
+export async function getStaticPaths(): Promise<OgPath[]> {
+  return [
+    { params: { slug: "home" }, props: { title: "ASTROZ TECH.", eyebrow: "Astroz" } },
+    { params: { slug: "blog" }, props: { title: "OUR BLOG", eyebrow: "Astroz" } },
+    {
+      params: { slug: "projects" },
+      props: { title: "OUR PROJECTS", eyebrow: "Astroz" },
+    },
+  ];
 }
 
 export const GET: APIRoute<OgProps> = async ({ props, site }) => {

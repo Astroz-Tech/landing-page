@@ -1,3 +1,251 @@
 ---
-return Astro.redirect("/en", 302);
+import { badgeVariants } from "$lib/components/ui/badge/index";
+import { buttonVariants } from "$lib/components/ui/button/index";
+import BaseLayout from "../layouts/base-layout.astro";
+import BlogRow from "../components/molecules/blog-row.astro";
+import SectionHeader from "../components/molecules/section-header.astro";
+import SocialCard from "../components/molecules/social-card.astro";
+import { getBlogPosts } from "../lib/blog";
+import { organizationJsonLd } from "../lib/json-ld";
+import { site } from "../lib/site";
+import { getSocialPosts } from "../lib/social";
+
+const siteUrl = Astro.site;
+if (!siteUrl) throw new Error("Set `site` in astro.config.mjs");
+
+const social = await getSocialPosts();
+const posts = (await getBlogPosts()).slice(0, 3);
+
+const tags = [
+  "TECHNOLOGY FOR EVERYONE",
+  "OPEN TO EVERYONE",
+  "COMMUNITY-DRIVEN",
+  "LEARN & CREATE",
+];
+
+const pillars = [
+  "TECH FOR EVERYONE",
+  "OPEN FOR ALL",
+  "COMMUNITY DRIVEN",
+  "LEARN & CREATE",
+  "DARE TO EXPERIMENT",
+  "DATA TRANSPARENCY",
+  "COLLABORATION",
+];
+
+const workSteps = [
+  {
+    title: "LISTEN",
+    body: "Talk to the people who have the problem. Read what already exists before writing code.",
+  },
+  {
+    title: "THINK",
+    body: "Sketch the architecture. Write down the assumptions the design depends on.",
+  },
+  {
+    title: "DEFINE",
+    body: "Say what the build will and will not do, and how we will measure it.",
+  },
+  { title: "BUILD", body: "Ship the smallest version that tests the claim." },
+  {
+    title: "SHOWCASE",
+    body: "Demo it in public, publish the results, and take the criticism.",
+  },
+];
+
+const organization = organizationJsonLd(siteUrl);
 ---
+
+<BaseLayout
+  title="Astroz"
+  description="A community for people who want to build software in the open."
+  ogImage="/og/home.png"
+  jsonLd={organization}
+>
+  <section class="mx-auto flex min-h-[calc(100svh-4rem-1px)] max-w-6xl items-center px-6 py-20 md:px-8 md:py-28">
+    <div class="w-full">
+      <h1
+        class="reveal font-semibold text-[clamp(3rem,7vw,5.5rem)] leading-[1.02] tracking-[-0.035em] text-balance"
+      >
+        ASTROZ TECH.
+      </h1>
+      <p class="reveal mt-6 max-w-[48ch] text-lg leading-[1.65] text-muted-foreground text-pretty">
+        A community for people who want to build software in the open. We run workshops, ship
+        projects, and publish what we learn.
+      </p>
+      <ul class="reveal mt-8 flex flex-wrap gap-2">
+        {
+          tags.map((tag) => (
+            <li class="inline-flex min-h-11 items-center rounded-md border border-border px-3 py-2 font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-foreground">
+              {tag}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="border-y border-border">
+    <div
+      class="mx-auto grid max-w-6xl gap-10 px-6 py-20 md:grid-cols-[1fr_1.15fr] md:gap-14 md:px-8 md:py-28"
+    >
+      <div class="reveal">
+        <h2 class="font-semibold text-[clamp(2rem,3.5vw,3rem)] leading-[1.1] tracking-[-0.025em]">
+          MOVEMENT PILLARS
+        </h2>
+        <p class="mt-5 text-muted-foreground text-pretty">
+          Seven commitments we check ourselves against. If a project or a session breaks one of
+          them, it does not ship.
+        </p>
+        <ul class="mt-6 flex flex-wrap gap-2">
+          {
+            pillars.map((pillar) => (
+              <li>
+                <span
+                  class={badgeVariants({ variant: "outline" }) +
+                    " h-auto min-h-8 border-border bg-card px-3 py-1.5 font-mono text-[0.625rem] font-medium uppercase tracking-[0.12em] text-foreground dark:border-foreground/30 dark:bg-foreground/10"}
+                >
+                  {pillar}
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="reveal reveal-2 md:border-l md:border-border md:pl-14">
+        <h2 class="font-semibold text-[clamp(2rem,3.5vw,3rem)] leading-[1.1] tracking-[-0.025em]">
+          OUR MISSION
+        </h2>
+        <p class="mt-5 max-w-[65ch] text-muted-foreground text-pretty">
+          Astroz started with a small group and a public repository. We meet, pick a problem, and
+          work on it where anyone can watch, copy, or argue with the result.
+        </p>
+        <p class="mt-4 max-w-[65ch] text-muted-foreground text-pretty">
+          Most technology education stops at the tutorial. We would rather you leave with a commit,
+          a working demo, and a list of what broke. The code, the notes, and the mistakes stay
+          online.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-6xl px-6 py-20 md:px-8 md:py-28">
+    <div class="reveal">
+      <div class="grid gap-6 md:grid-cols-[1.6fr_1fr] md:items-end md:gap-12">
+        <h2
+          class="max-w-[22ch] font-semibold text-[clamp(2rem,3.5vw,3rem)] leading-[1.1] tracking-[-0.025em] text-balance"
+        >
+          WORKFLOW
+        </h2>
+        <p class="max-w-[34ch] justify-self-end text-right text-muted-foreground text-pretty">
+          Five steps, repeated until the thing works.
+        </p>
+      </div>
+    </div>
+
+    <ol
+      class="reveal reveal-2 mt-14 grid gap-y-10 md:mt-16 md:grid-cols-5 md:gap-y-0"
+      aria-label="Work roadmap: deep tech startup"
+    >
+      {
+        workSteps.map((step, index) => (
+          <li class="relative border-t border-border pt-6 md:pr-6">
+            <span
+              class="absolute left-0 top-0 size-2 -translate-y-1/2 rounded-full bg-primary"
+              aria-hidden="true"
+            ></span>
+            <p class="font-mono text-[0.6875rem] font-medium uppercase tracking-[0.12em] text-primary">
+              {String(index + 1).padStart(2, "0")}
+            </p>
+            <h3 class="mt-2 text-[0.9375rem] font-semibold uppercase tracking-[0.04em]">
+              {step.title}
+            </h3>
+            <p class="mt-2 text-sm leading-[1.6] text-muted-foreground text-pretty">{step.body}</p>
+          </li>
+        ))
+      }
+    </ol>
+
+    <div class="reveal mt-16 border-t border-border pt-12 md:mt-20 md:pt-14">
+      <h3
+        class="mx-auto max-w-[38ch] text-center font-semibold text-[clamp(1.25rem,2.5vw,1.75rem)] leading-[1.35] tracking-[-0.015em] text-balance"
+      >
+        We publish the limits along with the results, and we fix what the evidence contradicts.
+      </h3>
+    </div>
+  </section>
+
+  {
+    social.length > 0 && (
+      <section class="mx-auto max-w-6xl px-6 py-20 md:px-8 md:py-28">
+        <div class="reveal">
+          <SectionHeader
+            title="FROM THE FEED"
+            intro="Short updates from X, GitHub, Instagram, and LinkedIn. Newest first."
+          />
+        </div>
+        <ul class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          {social.map((entry, index) => (
+            <li class:list={["reveal", index > 3 ? "reveal-3" : index > 1 ? "reveal-2" : ""]}>
+              <SocialCard entry={entry} />
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  {
+    posts.length > 0 && (
+      <section class="mx-auto max-w-6xl px-6 py-20 md:px-8 md:py-28">
+        <div class="reveal">
+          <SectionHeader
+            title="FROM THE BLOG"
+            intro="Write-ups from workshops, builds, and decisions we got wrong."
+            actionHref="/blog"
+            actionLabel="Read the blog"
+          />
+        </div>
+        <div>
+          {posts.map((entry, index) => (
+            <div class:list={["reveal", index > 1 ? "reveal-2" : ""]}>
+              <BlogRow entry={entry} />
+            </div>
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  <section class="mx-auto max-w-6xl px-6 py-20 md:px-8 md:py-28">
+    <div class="reveal relative rounded-lg border border-border bg-card">
+      <span class="cta-tick left-0 top-0 border-l border-t" aria-hidden="true"></span>
+      <span class="cta-tick right-0 top-0 border-r border-t" aria-hidden="true"></span>
+      <span class="cta-tick bottom-0 left-0 border-b border-l" aria-hidden="true"></span>
+      <span class="cta-tick bottom-0 right-0 border-b border-r" aria-hidden="true"></span>
+
+      <div class="flex flex-col items-center p-8 text-center md:p-12 lg:p-16">
+        <p class="font-mono text-[0.6875rem] font-medium uppercase tracking-[0.12em] text-primary">
+          GET IN TOUCH
+        </p>
+        <h2
+          class="mt-5 max-w-[30ch] font-semibold text-[clamp(1.5rem,3.5vw,2.25rem)] leading-[1.15] tracking-[-0.025em] text-balance"
+        >
+          Have a problem worth building on? Tell us about it.
+        </h2>
+
+        <a
+          href={`mailto:${site.email}`}
+          class={buttonVariants({
+            size: "lg",
+            class:
+              "reveal reveal-2 mt-10 w-full font-semibold duration-200 hover:-translate-y-0.5 active:translate-y-0 sm:w-auto md:mt-12",
+          })}
+        >
+          Email us
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,8 +1,6 @@
 ---
-import { useTranslations, type Lang } from "../../i18n";
 
 interface Props {
-  lang: Lang;
   title: string;
   intro?: string;
   actionHref?: string;
@@ -10,8 +8,7 @@ interface Props {
   actionExternal?: boolean;
 }
 
-const { lang, title, intro, actionHref, actionLabel, actionExternal = false } = Astro.props;
-const t = useTranslations(lang);
+const { title, intro, actionHref, actionLabel, actionExternal = false } = Astro.props;
 ---
 
 <div class="mb-10 flex flex-col gap-4 border-b border-border pb-6 md:flex-row md:items-end md:justify-between">
@@ -30,7 +27,7 @@ const t = useTranslations(lang);
         class="inline-flex min-h-11 items-center text-sm font-medium text-primary underline decoration-primary/30 underline-offset-4 hover:decoration-primary"
       >
         {actionLabel}
-        {actionExternal && <span class="sr-only"> ({t("a11y.newTab")})</span>}
+        {actionExternal && <span class="sr-only"> (opens in a new tab)</span>}
       </a>
     )
   }

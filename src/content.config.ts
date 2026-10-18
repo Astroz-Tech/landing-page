@@ -17,9 +17,7 @@ const projects = defineCollection({
   schema: z.object({
     title: z.string(),
     summary: z.string(),
-    role: z.string(),
     year: z.number().int(),
-    stack: z.array(z.string()).default([]),
     url: z
       .string()
       .refine((value) => value.startsWith("https://"), "url must start with https://")

@@ -1,11 +1,11 @@
 export const site = {
   name: "Astroz",
-  description: "We believe everyone has the right to help shape the future of technology.",
+  description: "A community for people who want to build software in the open.",
   email: "axelomatthew.terang@gmail.com",
   social: {
     x: "https://x.com/XhunterX330924",
-    github: "https://github.com/AxelMatthew12",
+    github: "https://github.com/Astroz-Tech",
     instagram: "https://www.instagram.com/astrozminds/",
-    linkedin: "https://www.linkedin.com/in/axelo-matthew-barus/",
+    linkedin: "https://www.linkedin.com/company/astroz-tech/",
   },
 } as const;

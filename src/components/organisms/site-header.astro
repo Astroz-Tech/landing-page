@@ -1,26 +1,15 @@
 ---
-import { getRelativeLocaleUrl } from "astro:i18n";
 import { buttonVariants } from "$lib/components/ui/button/index";
 import ThemeToggle from "../molecules/theme-toggle.svelte";
 import MobileNav from "./mobile-nav.svelte";
 import { site } from "../../lib/site";
-import { getLocaleSwitchHref } from "../../lib/i18n-links";
 import { normalizePath } from "../../lib/utils";
-import { useTranslations, type Lang } from "../../i18n";
 
-interface Props {
-  lang: Lang;
-}
-
-const { lang } = Astro.props;
-const t = useTranslations(lang);
-const other: Lang = lang === "en" ? "id" : "en";
-const switchHref = getLocaleSwitchHref(Astro.url.pathname, other);
-const home = getRelativeLocaleUrl(lang);
+const home = "/";
 const nav = [
-  { href: home, label: t("nav.home") },
-  { href: getRelativeLocaleUrl(lang, "blog"), label: t("nav.blog") },
-  { href: getRelativeLocaleUrl(lang, "projects"), label: t("nav.projects") },
+  { href: home, label: "Home" },
+  { href: "/blog", label: "Blog" },
+  { href: "/projects", label: "Projects" },
 ];
 const isActive = (href: string) => {
   const path = normalizePath(Astro.url.pathname);
@@ -41,21 +30,21 @@ const isActive = (href: string) => {
     >
       <img
         src="/assets/logo-navy.png"
-        alt={t("brand.name")}
+        alt="Astroz"
         width={644}
         height={400}
         class="h-8 w-auto dark:hidden"
       />
       <img
         src="/assets/logo-white.png"
-        alt={t("brand.name")}
+        alt="Astroz"
         width={602}
         height={374}
         class="hidden h-8 w-auto dark:block"
       />
     </a>
 
-    <nav class="hidden items-center gap-8 md:flex" aria-label={t("nav.menu")}>
+    <nav class="hidden items-center gap-8 md:flex" aria-label="Menu">
       {
         nav.map((item) => (
           <a
@@ -73,31 +62,26 @@ const isActive = (href: string) => {
     </nav>
 
     <div class="flex items-center gap-1 md:justify-self-end md:gap-2">
-      <a
-        href={switchHref}
-        hreflang={other}
-        lang={other}
-        aria-label={t("a11y.switchTo").replace("{language}", t(`language.${other}`))}
-        class="inline-flex h-11 min-w-11 items-center justify-center rounded-md px-2 font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground transition-colors duration-200 hover:bg-accent hover:text-foreground"
-      >
-        {other.toUpperCase()}
-      </a>
-      <ThemeToggle client:load label={t("a11y.themeToggle")} />
+      <ThemeToggle client:load label="Toggle light and dark theme" />
       <a
         href={`mailto:${site.email}`}
-        class={buttonVariants({ size: "lg", class: "hidden font-semibold duration-200 hover:-translate-y-0.5 md:inline-flex" })}
+        class={buttonVariants({
+          size: "lg",
+          class:
+            "hidden font-semibold duration-200 hover:-translate-y-0.5 active:translate-y-0 md:inline-flex",
+        })}
       >
-        {t("nav.donate")}
+        Donate
       </a>
       <MobileNav
         client:load
         items={nav}
         contactHref={`mailto:${site.email}`}
-        contactLabel={t("nav.donate")}
-        menuLabel={t("a11y.openMenu")}
-        title={t("nav.menu")}
-        description={t("nav.menu")}
-        closeLabel={t("a11y.closeMenu")}
+        contactLabel="Donate"
+        menuLabel="Open menu"
+        title="Menu"
+        description="Menu"
+        closeLabel="Close menu"
       />
     </div>
   </div>

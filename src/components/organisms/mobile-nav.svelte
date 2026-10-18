@@ -3,23 +3,23 @@
   import * as Sheet from "$lib/components/ui/sheet/index";
   import { buttonVariants } from "$lib/components/ui/button/index";
 
-  let {
-    items,
-    contactHref,
-    contactLabel,
-    menuLabel,
-    title,
-    description,
-    closeLabel,
-  }: {
-    items: { href: string; label: string }[];
+  interface NavItem {
+    href: string;
+    label: string;
+  }
+
+  interface Props {
+    items: NavItem[];
     contactHref: string;
     contactLabel: string;
     menuLabel: string;
     title: string;
     description: string;
     closeLabel: string;
-  } = $props();
+  }
+
+  let { items, contactHref, contactLabel, menuLabel, title, description, closeLabel }: Props =
+    $props();
 </script>
 
 <Sheet.Root>
