@@ -27,4 +27,21 @@ const projects = defineCollection({
   }),
 });
 
-export const collections = { blog, projects };
+const social = defineCollection({
+  loader: glob({ base: "./public/social", pattern: "**/*.mdx" }),
+  schema: z.object({
+    title: z.string(),
+    summary: z.string(),
+    platform: z.enum(["x", "github", "instagram", "linkedin"]),
+    url: z
+      .string()
+      .refine((value) => value.startsWith("https://"), "url must start with https://"),
+    image: z
+      .string()
+      .refine((value) => value.startsWith("/social/images/"), "image must start with /social/images/"),
+    publishedAt: z.coerce.date(),
+    draft: z.boolean().default(false),
+  }),
+});
+
+export const collections = { blog, projects, social };

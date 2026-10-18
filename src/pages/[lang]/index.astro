@@ -4,7 +4,9 @@ import { badgeVariants } from "$lib/components/ui/badge/index";
 import { buttonVariants } from "$lib/components/ui/button/index";
 import BaseLayout from "../../layouts/base-layout.astro";
 import SectionHeader from "../../components/molecules/section-header.astro";
+import SocialCard from "../../components/molecules/social-card.astro";
 import { site } from "../../lib/site";
+import { getSocialPosts } from "../../lib/social";
 import { isLang, locales, useTranslations, type Lang } from "../../i18n";
 
 export function getStaticPaths() {
@@ -17,6 +19,8 @@ const lang: Lang = langParam;
 const t = useTranslations(lang);
 const siteUrl = Astro.site;
 if (!siteUrl) throw new Error("Set `site` in astro.config.mjs");
+
+const social = await getSocialPosts(lang);
 
 const tags = [
   t("home.tags.everyone"),
@@ -53,39 +57,43 @@ const organization = {
   jsonLd={organization}
 >
   <section class="mx-auto max-w-6xl px-6 py-20 md:px-8 md:py-28">
-    <div class="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
-      <div>
-        <h1
-          class="reveal font-semibold text-[clamp(3rem,7vw,5.5rem)] leading-[1.02] tracking-[-0.035em] text-balance"
-        >
-          {t("home.hero.title")}
-        </h1>
-        <p class="reveal mt-6 max-w-[48ch] text-lg leading-[1.65] text-muted-foreground text-pretty">
-          {t("home.hero.lead")}
-        </p>
-        <ul class="reveal mt-8 flex flex-wrap gap-2">
-          {
-            tags.map((tag) => (
-              <li class="inline-flex min-h-11 items-center rounded-md border border-border px-3 py-2 font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-muted-foreground">
-                {tag}
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-      <div class="reveal lg:justify-self-end">
-        <img
-          src="/hero.png"
-          width="736"
-          height="736"
-          alt={t("home.hero.imageAlt")}
-          loading="eager"
-          decoding="async"
-          class="w-full max-w-md rounded-lg border border-border lg:max-w-none"
-        />
-      </div>
+    <div>
+      <h1
+        class="reveal font-semibold text-[clamp(3rem,7vw,5.5rem)] leading-[1.02] tracking-[-0.035em] text-balance"
+      >
+        {t("home.hero.title")}
+      </h1>
+      <p class="reveal mt-6 max-w-[48ch] text-lg leading-[1.65] text-muted-foreground text-pretty">
+        {t("home.hero.lead")}
+      </p>
+      <ul class="reveal mt-8 flex flex-wrap gap-2">
+        {
+          tags.map((tag) => (
+            <li class="inline-flex min-h-11 items-center rounded-md border border-border px-3 py-2 font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-muted-foreground">
+              {tag}
+            </li>
+          ))
+        }
+      </ul>
     </div>
   </section>
+
+  {
+    social.length > 0 && (
+      <section class="mx-auto max-w-6xl px-6 pb-20 md:px-8 md:pb-28">
+        <div class="reveal">
+          <SectionHeader lang={lang} title={t("home.social.title")} intro={t("home.social.intro")} />
+        </div>
+        <ul class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          {social.map((entry, index) => (
+            <li class:list={["reveal", index > 3 ? "reveal-3" : index > 1 ? "reveal-2" : ""]}>
+              <SocialCard entry={entry} lang={lang} />
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
 
   <section class="border-y border-border">
     <div class="mx-auto max-w-6xl px-6 py-20 md:px-8 md:py-28">
@@ -113,7 +121,6 @@ const organization = {
     <div class="reveal">
       <SectionHeader
         lang={lang}
-        eyebrow={t("brand.name")}
         title={t("home.pillars.title")}
         intro={t("home.pillars.intro")}
       />

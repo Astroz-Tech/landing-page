@@ -23,11 +23,8 @@ const posts = await getBlogPosts(lang);
   ogImage={`/og/blog/${lang}.png`}
 >
   <section class="mx-auto max-w-6xl px-6 py-16 md:px-8 md:py-24">
-    <p class="reveal font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-primary">
-      {t("brand.name")}
-    </p>
     <h1
-      class="reveal mt-3 font-semibold text-[clamp(2.5rem,5vw,4rem)] leading-[1.05] tracking-[-0.03em]"
+      class="reveal font-semibold text-[clamp(2.5rem,5vw,4rem)] leading-[1.05] tracking-[-0.03em]"
     >
       {t("blog.title")}
     </h1>
