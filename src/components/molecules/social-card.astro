@@ -1,0 +1,58 @@
+---
+import { ArrowUpRight } from "@lucide/astro";
+import { formatDate } from "../../lib/blog";
+import type { SocialEntry } from "../../lib/social";
+import { useTranslations, type Lang } from "../../i18n";
+import SocialIcon from "../atoms/social-icon.astro";
+
+interface Props {
+  entry: SocialEntry;
+  lang: Lang;
+}
+
+const { entry, lang } = Astro.props;
+const t = useTranslations(lang);
+const { title, summary, platform, url, image, publishedAt } = entry.data;
+---
+
+<a
+  href={url}
+  target="_blank"
+  rel="noopener noreferrer"
+  class="group flex h-full flex-col overflow-hidden rounded-lg border border-border bg-card transition-[translate,border-color,background-color] duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-accent/30"
+>
+  <div class="aspect-[16/10] border-b border-border bg-muted">
+    <img
+      src={image}
+      width="640"
+      height="400"
+      alt=""
+      loading="lazy"
+      decoding="async"
+      class="h-full w-full object-cover"
+    />
+  </div>
+  <div class="flex flex-1 flex-col p-5 md:p-6">
+    <p
+      class="flex flex-wrap items-center gap-2 font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-muted-foreground"
+    >
+      <SocialIcon name={platform} />
+      <span>{platform}</span>
+      <span aria-hidden="true">·</span>
+      <time datetime={publishedAt.toISOString()}>{formatDate(publishedAt, lang)}</time>
+    </p>
+    <h3 class="mt-4 font-semibold text-xl leading-tight tracking-[-0.01em]">{title}</h3>
+    <p class="mt-2 line-clamp-2 text-sm text-muted-foreground text-pretty">{summary}</p>
+    <span
+      class="mt-auto flex items-center justify-end gap-1 pt-4 font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-primary"
+    >
+      <ArrowUpRight
+        size={16}
+        stroke-width={1.5}
+        aria-hidden="true"
+        class="transition-[translate] duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+      />
+      <span class="sr-only">({t("a11y.newTab")})</span>
+    </span>
+  </div>
+</a>
