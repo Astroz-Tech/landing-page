@@ -1,6 +1,6 @@
 # Astroz
 
-Static, bilingual (EN/ID) company profile and blog for Astroz.
+Static, English-only company profile and blog for Astroz.
 
 - Astro 7, `output: "static"`, prerendered routes only
 - Svelte 5 islands for the theme toggle and the mobile sheet
@@ -21,7 +21,7 @@ bun run check      # astro check; zero errors required
 ## Layout
 
 ```
-astro.config.mjs        site, i18n, fonts, Tailwind, $lib aliases, sitemap
+astro.config.mjs        site, fonts, Tailwind, $lib aliases, sitemap
 components.json         shadcn-svelte aliases
 src/
   components/atoms/     mdx-a, mdx-img, code-block
@@ -30,17 +30,16 @@ src/
   components/ui/        shadcn-svelte primitives
   components/mdx-components.ts
   content.config.ts     collection schemas
-  i18n/{en,id}.json     dictionaries, identical key sets
   layouts/              base-layout.astro, post-layout.astro (templates)
-  lib/                  site, blog, projects, social, feed, i18n-links, og-font,
+  lib/                  site, blog, projects, social, feed, og-font,
                         html-entities, utils
   pages/                routes, feeds, robots, OG images
   styles/global.css     design tokens
 public/
   _redirects            Cloudflare redirects
-  blog/{en,id}/         blog entries (MDX; may be empty)
-  projects/{en,id}/     project entries (MDX)
-  social/{en,id}/       social feed entries (MDX)
+  blog/                 blog entries (MDX; may be empty)
+  projects/             project entries (MDX)
+  social/               social feed entries (MDX)
   social/images/        social post thumbnails
   fonts/                Plus Jakarta Sans TTFs for OG images
 ```
@@ -50,8 +49,7 @@ public/
 `AGENTS.md` is authoritative for framework, layout, commands, and conventions; `DESIGN.md` is
 authoritative for appearance, voice, and acceptance criteria. Read both before changing anything.
 
-Content lives in MDX frontmatter. Blog entries are locale-scoped by folder, so an entry without a
-translation never appears under the other locale's URL. The blog collection may be empty; `/blog`
+Content lives in MDX frontmatter, one language only. The blog collection may be empty; `/blog`
 then renders its empty panel. Projects have no detail route — the index card links out to `url`.
 
 ## Deployment

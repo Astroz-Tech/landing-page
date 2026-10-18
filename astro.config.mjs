@@ -10,24 +10,15 @@ const SITE = "https://astroz.org";
 export default defineConfig({
   site: SITE,
   output: "static",
-  i18n: {
-    locales: ["en", "id"],
-    defaultLocale: "en",
-    routing: { prefixDefaultLocale: true },
+  server: {
+    allowedHosts: [".ngrok-free.app", ".ngrok.app", ".ngrok.io"],
   },
   integrations: [
     mdx(),
     svelte(),
     sitemap({
-      i18n: {
-        defaultLocale: "en",
-        locales: { en: "en", id: "id" },
-      },
       filter: (page) =>
-        page !== `${SITE}/` &&
-        !page.includes("/og/") &&
-        !/\.(xml|json|txt)$/.test(page) &&
-        !page.endsWith("/404/"),
+        !page.includes("/og/") && !/\.(xml|json|txt)$/.test(page) && !page.endsWith("/404/"),
     }),
   ],
   markdown: { syntaxHighlight: false },
@@ -57,21 +48,32 @@ export default defineConfig({
       alias: [
         {
           find: "$lib/components/ui",
-          replacement: fileURLToPath(new URL("./src/components/ui", import.meta.url)),
+          replacement: fileURLToPath(
+            new URL("./src/components/ui", import.meta.url),
+          ),
         },
         {
           find: "$lib/components",
-          replacement: fileURLToPath(new URL("./src/components", import.meta.url)),
+          replacement: fileURLToPath(
+            new URL("./src/components", import.meta.url),
+          ),
         },
         {
           find: "$lib/utils",
-          replacement: fileURLToPath(new URL("./src/lib/utils", import.meta.url)),
+          replacement: fileURLToPath(
+            new URL("./src/lib/utils", import.meta.url),
+          ),
         },
         {
           find: "$lib/hooks",
-          replacement: fileURLToPath(new URL("./src/lib/hooks", import.meta.url)),
+          replacement: fileURLToPath(
+            new URL("./src/lib/hooks", import.meta.url),
+          ),
         },
-        { find: "$lib", replacement: fileURLToPath(new URL("./src", import.meta.url)) },
+        {
+          find: "$lib",
+          replacement: fileURLToPath(new URL("./src", import.meta.url)),
+        },
       ],
     },
   },

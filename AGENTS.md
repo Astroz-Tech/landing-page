@@ -6,13 +6,13 @@ changing anything.
 ## 1. What this repository is
 
 Astroz is a community technology movement. This repository is its company profile and blog: a
-static, bilingual (EN/ID), light/dark site. It is not a personal portfolio, dashboard, or CMS.
+static, English-only, light/dark site. It is not a personal portfolio, dashboard, or CMS.
 
 Three top-level routes only: **Home**, **Blog**, **Projects**. There is no photo gallery and no
 donate route.
 
 `DESIGN.md` is the authority for visual system, tokens, typography, layout, components, voice and
-copy, information architecture, i18n copy, accessibility, SEO, performance, and acceptance
+copy, information architecture, language, accessibility, SEO, performance, and acceptance
 criteria. This file is the authority for stack, structure, commands,
 and engineering conventions. If the two disagree about appearance or wording, `DESIGN.md` wins. If
 `DESIGN.md` names a path or command that does not exist, this file wins.
@@ -59,8 +59,6 @@ Do not add React, Next.js, `next/*`, `react-*`, `next-themes`, `next-mdx-remote`
   - `src/components/organisms/mobile-nav.svelte` — `client:load`, wraps the shadcn-svelte `Sheet`
 - No other component gets a `client:*` directive without a documented reason in the proposal and
   commit message.
-- Language switching is an `<a>` to the equivalent locale path. No JavaScript, no spinner, no flag
-  emoji.
 - Content must be visible without JavaScript. No `opacity: 0` + reveal scripts.
 - No animation library. CSS transitions only, 150–250ms, disabled under
   `prefers-reduced-motion: reduce`.
@@ -68,7 +66,7 @@ Do not add React, Next.js, `next/*`, `react-*`, `next-themes`, `next-mdx-remote`
 ## 5. Project structure (atomic design)
 
 ```
-astro.config.mjs            # site, i18n, fonts, Tailwind, $lib aliases, sitemap
+astro.config.mjs            # site, fonts, Tailwind, $lib aliases, sitemap
 components.json             # shadcn-svelte aliases
 src/
   components/
@@ -79,20 +77,19 @@ src/
     ui/                     # vendored shadcn-svelte primitives; do not hand-edit
     mdx-components.ts       # MDX component registry
   layouts/                  # templates: base-layout, post-layout
-  lib/                      # site, blog, projects, social, feed, i18n-links, og-font,
-                            # html-entities, utils
+  lib/                      # site, blog, projects, social, feed, og-font, html-entities, utils
   pages/                    # routes, feeds, robots, OG endpoint
-  i18n/{en,id}.json
-  i18n/index.ts
   styles/global.css
   content.config.ts
 public/
   _redirects
+  favicon.png               # 512x512 navy tile, white AZ monogram
+  apple-touch-icon.png      # 180x180
   opengraph-image.png
   fonts/                    # vendored Plus Jakarta Sans TTFs (400, 600) for OG rendering
-  blog/{en,id}/*.mdx        # blog entries (may be empty)
-  projects/{en,id}/*.mdx    # project entries
-  social/{en,id}/*.mdx      # social feed entries
+  blog/*.mdx                # blog entries (may be empty)
+  projects/*.mdx            # project entries
+  social/*.mdx              # social feed entries
   social/images/*           # social post thumbnails
 ```
 
@@ -102,10 +99,10 @@ Routes:
 src/pages/
   index.astro                # redirect to /en
   404.astro
-  [lang]/index.astro
-  [lang]/blog/index.astro
-  [lang]/blog/[slug].astro
-  [lang]/projects/index.astro
+  index.astro
+  blog/index.astro
+  blog/[slug].astro
+  projects/index.astro
   og/[...slug].png.ts
   robots.txt.ts
   rss.xml.ts
@@ -122,13 +119,11 @@ Rules:
   `src/pages`. Do not add a second component tree.
 - `ui/` is the only vendored tree. Do not restructure or hand-edit it. Add primitives with
   `bunx shadcn-svelte@latest add <component>`.
-- Blog, project, and social MDX are locale-scoped by folder: `public/blog/{en,id}/<slug>.mdx`,
-  `public/projects/{en,id}/<slug>.mdx`, and `public/social/{en,id}/<slug>.mdx`. An entry with no
-  translation does not appear in that locale's index; never render untranslated content under a
-  translated URL.
-- `public/` is copied verbatim, so MDX files are also reachable at
-  `/blog/<lang>/<slug>.mdx`, `/projects/<lang>/<slug>.mdx`, and `/social/<lang>/<slug>.mdx`.
-  Frontmatter and bodies are public; never put secrets in them.
+- Blog, project, and social MDX live flat in their collection folder: `public/blog/<slug>.mdx`,
+  `public/projects/<slug>.mdx`, and `public/social/<slug>.mdx`. The slug is the file name.
+- `public/` is copied verbatim, so MDX files are also reachable at `/blog/<slug>.mdx`,
+  `/projects/<slug>.mdx`, and `/social/<slug>.mdx`. Frontmatter and bodies are public; never put
+  secrets in them.
 - Delete a legacy file when its replacement lands. No parallel implementations.
 
 `public/_redirects` contains exactly:
@@ -159,24 +154,19 @@ Rules:
   `src/components/atoms/code-block.astro`, which calls `sugar-high`'s `highlight()` at build time.
 - Icons: Lucide, 16px, `stroke-width={1.5}`, 8px gap. Never use emoji as an icon.
 
-## 7. Internationalization
+## 7. Language and copy
 
-- Locales: `en` (default), `id`. `prefixDefaultLocale: true`; `/en/...` and `/id/...` are
-  canonical. `/` redirects to `/en` via `src/pages/index.astro` and `public/_redirects`.
-- All UI copy comes from `src/i18n/en.json` and `src/i18n/id.json` through
-  `useTranslations(lang)` in `src/i18n/index.ts`. Never hardcode user-facing strings in a
-  component.
-- Both dictionaries must have identical key sets; `src/i18n/index.ts` throws at build time when
-  they differ.
-- Resolve the locale with `isLang(Astro.params.lang)`; unknown segments must not render.
-- Build internal links with `getRelativeLocaleUrl()` from `astro:i18n`. Never concatenate
-  `/${lang}/...` by hand.
-- Set `<html lang={lang}>`.
-- Format dates and numbers with `Intl.DateTimeFormat(lang === "id" ? "id-ID" : "en-US", ...)`. No
-  relative dates; they freeze at build time.
-- The language toggle links to the same path in the other locale. If that entry does not exist,
-  link to the other locale's section index. `getLocaleSwitchHref()` in `src/lib/i18n-links.ts`
-  owns this logic; it is synchronous and only distinguishes the `/blog` and `/projects` sections.
+- One language: English. There is no locale segment, no `/en` prefix, no language toggle, and no
+  Astro `i18n` config. `/blog/...` and `/projects/...` are canonical.
+- Copy lives directly in the page or component that renders it. There is no dictionary, no
+  `t()` helper, and no translation layer. Write the sentence where it appears.
+- Set `<html lang="en">`.
+- Format dates with `Intl.DateTimeFormat("en-US", ...)`. No relative dates; they freeze at build
+  time.
+- Build internal links as plain absolute paths (`/blog`, `/blog/<slug>/`). `getRelativeLocaleUrl`
+  and `astro:i18n` are gone.
+- Legacy `/en/...` and `/id/...` URLs redirect to their unprefixed or home equivalent via
+  `public/_redirects`.
 
 ## 8. Content
 
@@ -184,13 +174,13 @@ Rules:
   schemas. Invalid frontmatter fails the build.
 - Blog frontmatter: `title`, `summary`, `publishedAt` (ISO date), `draft` (optional boolean,
   default `false`). The blog collection may be empty; `/blog` renders its empty panel instead.
-- Project frontmatter: `title`, `summary`, `role`, `year` (integer), `stack` (string array,
-  default `[]`), `url` (optional, `https://` only). Projects have no detail route: the index card
-  is the whole presentation, linking out to `url` when it exists.
+- Project frontmatter: `title`, `summary`, `year` (integer), `url` (optional, `https://` only).
+  Projects have no detail route: the index card is the whole presentation, linking out to `url`
+  when it exists. The card carries no role line and no stack tags.
 - Social frontmatter: `title`, `summary`, `platform` (`x`, `github`, `instagram`, `linkedin`),
   `url` (`https://` only), `image` (`/social/images/...` only), `publishedAt` (ISO date), `draft`
   (optional boolean, default `false`). Rendered as cards on the home page; the home section is
-  omitted for a locale with no entries.
+  omitted when the collection has no entries.
 - Delete a legacy file when its replacement lands. No parallel implementations.
 
 ## 9. Accessibility, SEO, performance
@@ -198,8 +188,8 @@ Rules:
 - Meet DESIGN §11 (WCAG 2.2 AA): one `h1`, one `header`/`nav`/`main`/`footer`, skip link to
   `#main`, visible focus, 44px touch targets, meaningful `alt`, focus trap in the sheet,
   reduced-motion support.
-- Every page sets a canonical URL including the locale and `hreflang` alternates for `en`, `id`,
-  and `x-default`. `src/layouts/base-layout.astro` owns this.
+- Every page sets a canonical URL. There are no `hreflang` alternates.
+  `src/layouts/base-layout.astro` owns this.
 - Absolute URLs come from `Astro.site` (set `site` in `astro.config.mjs`). Never hardcode a domain
   in a component.
 - JSON-LD: `Organization` on home, `BlogPosting` on posts (author `Organization`).
