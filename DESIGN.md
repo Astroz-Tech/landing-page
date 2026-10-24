@@ -126,19 +126,44 @@ the bar rather than on the space between the wordmark and the controls.
   mode, `/assets/logo-white.png` (foreground ink) in dark mode; swapped with `dark:hidden` /
   `dark:block`, no JavaScript. 32px tall, transparent background, `alt="Astroz"`.
 - Centre: `Home`, `Blog`, `Projects` — in that order.
-- Right: theme toggle, `Donate` button (`mailto:`).
+- Right: theme toggle, `Donate` button.
+- `Donate` opens a QR popover anchored under the button's right edge — the native
+  `popover` attribute driven by `popovertarget`, no JavaScript. Top layer, so the sticky header's
+  `backdrop-blur` and clipping never affect it; `position: fixed`, `top: 4.5rem`,
+  `right: max(2rem, calc((100% - 72rem) / 2 + 2rem))` so its edge lands on the header gutter at
+  every width. 272px wide, `rounded-lg`, `border-border`, `bg-popover`.
+- Popover contents: mono label `DONATE VIA SAWERIA`, then `/assets/saweria-qr.png` at full panel
+  width with `width`/`height` set to its 3000px intrinsic size (no CLS), `alt="Saweria QR code for
+  Astroz donations"`, then a `text-sm` instruction line, then an `Open donation page` link to
+  `site.donate` with a 16px `ArrowUpRight`, `target="_blank"`, `rel="noopener noreferrer"`.
+- Native popover semantics carry the dismissal: `Esc`, outside click, and focus return to the
+  button. Never rebuild this as a custom JS overlay.
 - Sticky, 64px tall, `bg-background/80`, `backdrop-blur`, 1px bottom border.
 - Active route: `text-foreground` with a 2px `primary` underline that wipes in from the left.
 - Inactive: `text-muted-foreground`.
 
-**Mobile** — logomark, theme toggle, menu button. The menu opens the shadcn
-`Sheet` from the right with large sans links and the `Donate` button at the bottom. Focus is
-trapped while open; `Esc` closes.
+**Mobile** — logomark, theme toggle, menu button. The menu opens the shadcn `Sheet` from the
+right, `w-[85vw] max-w-sm`, `bg-background`, `overflow-y-auto` so the QR panel can extend it.
+
+- Header: mono label `MENU` in `Label` style over a `border-b` hairline. No large display title.
+- Links: `Home`, `Blog`, `Projects` at 18px semibold (`text-lg`), `min-h-14`, one per row, each
+  with a `border-b` hairline. No numbering, no icons. Active route `text-foreground` via
+  `aria-current="page"`; inactive `text-muted-foreground`. Hover translates the label 4px.
+- Footer of the sheet: `Donate` button, then a `ghost` `Close menu` button, `px-5 py-5`, pinned
+  with `mt-auto`.
+- `Donate` toggles an inline QR panel above itself (`aria-expanded` / `aria-controls`), the same
+  `DONATE VIA SAWERIA` label and `/assets/saweria-qr.png` as the desktop popover, plus an
+  `Open donation page` link to `site.donate`. The panel collapses whenever the sheet closes.
+- Motion, 200–240ms: the panel and overlay transition (`translate 100%` ↔ `0`, `opacity 0` ↔ `1`)
+  via `data-state` and `@starting-style`; the sheet body fades in per row with a 35ms stagger
+  capped at six steps. The sheet holds its unmount for 220ms so the exit plays. All of it collapses
+  to instant under `prefers-reduced-motion: reduce`.
+- Focus is trapped while open; `Esc` closes.
 
 **Footer** — one row, hairline top border.
 
 - Left: `Astroz` wordmark, then `© {year} ALL RIGHTS RESERVED.` in mono.
-- Right: X, GitHub, Instagram, LinkedIn as 44×44 icon links, `aria-label` per network, opening in
+- Right: GitHub, Instagram, LinkedIn as 44×44 icon links, `aria-label` per network, opening in
   a new tab with `rel="noopener noreferrer"`.
 - Brand marks are inline SVG in `currentColor`; Lucide has no brand icons. Do not substitute
   generic glyphs.
@@ -315,7 +340,7 @@ what a page needs.
 
 ### Badge
 
-- Used for the seven movement pillars.
+- Used for the six movement pillars.
 - `variant="outline"` plus `bg-card text-foreground`, so the chip reads as a crisp hairline
   outline against the page in both themes instead of a barely-there filled pill. In dark mode the
   outline is lifted to `dark:border-foreground/30` with `dark:bg-foreground/10`, because the
@@ -408,9 +433,9 @@ No role line and no stack tags: the card is year, title, summary, destination.
 
 | # | Section | Anatomy |
 |---|---|---|
-| 1 | Hero | Full viewport height below the sticky header; single column, vertically centred: h1, lead, four tags |
+| 1 | Hero | Full viewport height below the sticky header; single column, vertically centred: h1, lead |
 | 2 | Pillars + mission | `border-y` band, two columns: pillars on the left, mission on the right |
-| 3 | Workflow | Title and right-aligned subtitle, then a five-step roadmap and the centred working-principles heading |
+| 3 | Workflow | Title and right-aligned subtitle, then a five-step roadmap |
 | 4 | Social feed | Section header, then a card grid from the `social` collection |
 | 5 | Blog preview | Section header with a link to the blog, then the three newest rows |
 | 6 | Contact CTA | Centred card: h2, then the contact button |
@@ -421,11 +446,11 @@ No role line and no stack tags: the card is year, title, summary, destination.
   64px header and its 1px border — with `flex items-center` so the copy sits on the optical centre
   line. Nothing from the next section is visible on load.
 - H1: `ASTROZ TECH.` at Display XL.
-- Lead: `We believe everyone has the right to help shape the future of technology.`
-- Four tags, wrapping: `TECHNOLOGY FOR EVERYONE`, `OPEN TO EVERYONE`, `COMMUNITY-DRIVEN`,
-  `LEARN & CREATE`. Rendered as bordered mono chips, `min-h-11`, `rounded-md`, `text-foreground`
-  so the label stays legible in both themes.
-- No image, no eyebrow above the h1, and no action buttons: the tags are the only hero metadata.
+- Lead: `We are dedicated to developing open-source software innovations. By publishing and
+  launching projects, we are committed to contributing to the development of intellectual property
+  in the future.`
+- No image, no eyebrow above the h1, no tag row, and no action buttons: the lead is the only hero
+  body below the h1.
 
 **Social feed**
 
@@ -446,15 +471,15 @@ No role line and no stack tags: the card is year, title, summary, destination.
 
 - One `border-y` band; inner grid `md:grid-cols-[1fr_1.15fr]`, `gap-10 md:gap-14`,
   `px-6 py-20 md:px-8 md:py-28`. Columns stack on mobile.
-- Left column: H2 `MOVEMENT PILLARS`, intro paragraph `mt-5`, then seven
+- Left column: H2 `MOVEMENT PILLARS`, intro paragraph `mt-5`, then six
   badges `mt-6` in a wrapping flex row.
 - Right column: `md:border-l md:border-border md:pl-14`; H2 `OUR MISSION`, no icon. Two paragraphs
   at `65ch`, second one `mt-4`.
 - Source row `mt-8 border-l-2 border-primary pl-5`: mono label `SOURCE`, then the GitHub link
   (`github.com/AxelMatthew12`) at `text-sm font-medium` with a 16px `ArrowUpRight`, opening in a
   new tab with the visually hidden notice. There is no quotation and no attribution.
-- Seven badges: `TECH FOR EVERYONE`, `OPEN FOR ALL`, `COMMUNITY DRIVEN`, `LEARN & CREATE`,
-  `DARE TO EXPERIMENT`, `DATA TRANSPARENCY`, `COLLABORATION`. Secondary `Badge` at mono 10px
+- Six badges: `TECH FOR EVERYONE`, `COMMUNITY DRIVEN`, `LEARN & CREATE`,
+  `DARE TO EXPERIMENT`, `CONNECT AND INNOVATE`, `COLLABORATION`. Secondary `Badge` at mono 10px
   uppercase `tracking-[0.12em]`.
 
 **Workflow**
@@ -464,16 +489,16 @@ No role line and no stack tags: the card is year, title, summary, destination.
 - Header: two columns `md:grid-cols-[1.6fr_1fr] md:items-end`. H2 `WORKFLOW`, capped at
   `22ch`. Subtitle in
   `text-muted-foreground`, right-aligned at every breakpoint, capped at `34ch`.
-- Roadmap: `<ol>` with `aria-label`, `md:grid-cols-5`, no column gap so the 1px
-  `border-t` hairlines join into one continuous line. Each item carries an 8px `bg-primary`
-  dot centred on the line, then the sequence number `01` in mono `text-primary`, the uppercase
-  step title at 15px semibold, and a `text-sm text-muted-foreground` body.
-- Five steps: `LISTEN`, `THINK`, `DEFINE`, `BUILD`, `SHOWCASE`.
-- On mobile the roadmap stacks, each item keeping its top hairline and node.
-- Working principles: `mt-16 border-t border-border pt-12 md:mt-20 md:pt-16`, then a single
-  centred `h3` holding the five-sentence principle text. No label and no separate work-cycle
-  row: the heading is `max-w-[38ch] mx-auto text-center`, semibold, `clamp(1.25rem,2.5vw,1.75rem)`
-  with `leading-[1.35]`, `tracking-[-0.015em]`, `text-balance`.
+- Roadmap: `<ol>` with `aria-label`, stacked rows, one per step. Each row carries a top 1px
+  `border-t` hairline with an 8px `bg-primary` dot at its left end, then a two-column grid
+  `md:grid-cols-[minmax(0,13rem)_minmax(0,1fr)] md:gap-x-12`: the sequence number `01` in mono
+  `text-primary` and the uppercase step title at 15px semibold on the left, the
+  `text-[0.9375rem] leading-[1.65] text-muted-foreground` body capped at `65ch` on the right. Rows
+  keep a readable measure at every width; never five narrow columns.
+- Five steps: `RESEARCH`, `COLLABORATION`, `DEVELOPMENT`, `EVALUATION`,
+  `PUBLICATION AND EDUCATION`.
+- On mobile each row stacks: number, title, then body, keeping its top hairline and node.
+- The section ends with the roadmap; there is no closing heading below it.
 
 **Blog preview**
 
@@ -633,7 +658,7 @@ public/
 - [ ] No "Astroz Research", no `RESEARCH` descriptor, no research areas.
 - [ ] Blog index shows the empty panel when the collection is empty.
 - [ ] Project cards show year, title, summary, and destination.
-- [ ] Footer shows the wordmark, copyright, and four social icon links.
+- [ ] Footer shows the wordmark, copyright, and three social icon links.
 - [ ] All colors and radii resolve through semantic tokens; light mode has no pure-white surface.
 - [ ] Light and dark have equivalent hierarchy and contrast.
 - [ ] 360px viewport has no horizontal overflow.
@@ -644,8 +669,9 @@ public/
 
 ## 16. Defaults for open decisions
 
-- **Contact:** a `mailto:` action, not a form, until a real inbox and spam strategy exist. Both the
-  `Donate` nav button and the `Contact us` CTA point at the same address.
+- **Contact:** a `mailto:` action, not a form, until a real inbox and spam strategy exist. The
+  `Contact us` CTA points at that address; the `Donate` button opens the Saweria QR popover and
+  links out to `site.donate`.
 - **Photos:** omitted entirely. The original gallery is not part of the current site.
 - **Blog:** ships with zero entries. The route and MDX pipeline stay wired.
 - **Projects:** one entry, `Astro-Search`. No detail pages; the card links out.

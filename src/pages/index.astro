@@ -16,40 +16,35 @@ if (!siteUrl) throw new Error("Set `site` in astro.config.mjs");
 const social = await getSocialPosts();
 const posts = (await getBlogPosts()).slice(0, 3);
 
-const tags = [
-  "TECHNOLOGY FOR EVERYONE",
-  "OPEN TO EVERYONE",
-  "COMMUNITY-DRIVEN",
-  "LEARN & CREATE",
-];
-
 const pillars = [
   "TECH FOR EVERYONE",
-  "OPEN FOR ALL",
   "COMMUNITY DRIVEN",
   "LEARN & CREATE",
   "DARE TO EXPERIMENT",
-  "DATA TRANSPARENCY",
+  "CONNECT AND INNOVATE",
   "COLLABORATION",
 ];
 
 const workSteps = [
   {
-    title: "LISTEN",
-    body: "Talk to the people who have the problem. Read what already exists before writing code.",
+    title: "RESEARCH",
+    body: "We begin by conducting an in-depth analysis of an issue, gathering information with precision from a variety of perspectives.",
   },
   {
-    title: "THINK",
-    body: "Sketch the architecture. Write down the assumptions the design depends on.",
+    title: "COLLABORATION",
+    body: "We are not acting alone, as the study of this innovative proposal requires direct evaluation and validation of the issues raised. We are opening up the discussion to broaden our perspectives and put the ideas to the test.",
   },
   {
-    title: "DEFINE",
-    body: "Say what the build will and will not do, and how we will measure it.",
+    title: "DEVELOPMENT",
+    body: "This study of the innovation design serves as a solid foundation for us to create tangible technological solutions. We are determined to bring this idea to fruition with the help of the latest technology, with a focus on delivering real-world benefits.",
   },
-  { title: "BUILD", body: "Ship the smallest version that tests the claim." },
   {
-    title: "SHOWCASE",
-    body: "Demo it in public, publish the results, and take the criticism.",
+    title: "EVALUATION",
+    body: "The development of innovations into useful technologies cannot be separated from evaluation. We implement checks and balances when applying innovations to solve problems, ranging from usability testing to ensuring that the technology is as effective as possible in resolving the issues at hand.",
+  },
+  {
+    title: "PUBLICATION AND EDUCATION",
+    body: "Sharing the results of our innovation is a key aspect of our work. We do not simply create and store them; rather, we seek to explore various platforms on which to publish our work. We also ensure that we share the insights gained from this learning and development process in the form of educational case studies. We do this because we want these innovative products not only to deliver tangible benefits, but also to inspire others to start innovating through the concepts and ideas we share.",
   },
 ];
 
@@ -70,18 +65,10 @@ const organization = organizationJsonLd(siteUrl);
         ASTROZ TECH.
       </h1>
       <p class="reveal mt-6 max-w-[48ch] text-lg leading-[1.65] text-muted-foreground text-pretty">
-        A community for people who want to build software in the open. We run workshops, ship
-        projects, and publish what we learn.
+        We are dedicated to developing open-source software innovations. By publishing and
+        launching projects, we are committed to contributing to the development of intellectual
+        property in the future.
       </p>
-      <ul class="reveal mt-8 flex flex-wrap gap-2">
-        {
-          tags.map((tag) => (
-            <li class="inline-flex min-h-11 items-center rounded-md border border-border px-3 py-2 font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-foreground">
-              {tag}
-            </li>
-          ))
-        }
-      </ul>
     </div>
   </section>
 
@@ -94,8 +81,8 @@ const organization = organizationJsonLd(siteUrl);
           MOVEMENT PILLARS
         </h2>
         <p class="mt-5 text-muted-foreground text-pretty">
-          Seven commitments we check ourselves against. If a project or a session breaks one of
-          them, it does not ship.
+          In developing our software innovations, we prioritise open, collaborative and
+          communicative learning, guided by six core working principles.
         </p>
         <ul class="mt-6 flex flex-wrap gap-2">
           {
@@ -118,13 +105,12 @@ const organization = organizationJsonLd(siteUrl);
           OUR MISSION
         </h2>
         <p class="mt-5 max-w-[65ch] text-muted-foreground text-pretty">
-          Astroz started with a small group and a public repository. We meet, pick a problem, and
-          work on it where anyone can watch, copy, or argue with the result.
+          Driven by a desire to create a comfortable environment for innovation, we aim to provide
+          a space where people can have the courage to propose ideas and bring them to fruition.
         </p>
         <p class="mt-4 max-w-[65ch] text-muted-foreground text-pretty">
-          Most technology education stops at the tutorial. We would rather you leave with a commit,
-          a working demo, and a list of what broke. The code, the notes, and the mistakes stay
-          online.
+          For us, technological development is an opportunity that must be pursued fairly so that
+          it can be harnessed for the benefit of many.
         </p>
       </div>
     </div>
@@ -145,35 +131,31 @@ const organization = organizationJsonLd(siteUrl);
     </div>
 
     <ol
-      class="reveal reveal-2 mt-14 grid gap-y-10 md:mt-16 md:grid-cols-5 md:gap-y-0"
+      class="reveal reveal-2 mt-14 grid gap-y-8 md:mt-16 md:gap-y-10"
       aria-label="Work roadmap: deep tech startup"
     >
       {
         workSteps.map((step, index) => (
-          <li class="relative border-t border-border pt-6 md:pr-6">
+          <li class="relative grid gap-2 border-t border-border pt-6 md:grid-cols-[minmax(0,13rem)_minmax(0,1fr)] md:gap-x-12">
             <span
               class="absolute left-0 top-0 size-2 -translate-y-1/2 rounded-full bg-primary"
               aria-hidden="true"
             ></span>
-            <p class="font-mono text-[0.6875rem] font-medium uppercase tracking-[0.12em] text-primary">
-              {String(index + 1).padStart(2, "0")}
+            <div>
+              <p class="font-mono text-[0.6875rem] font-medium uppercase tracking-[0.12em] text-primary">
+                {String(index + 1).padStart(2, "0")}
+              </p>
+              <h3 class="mt-2 text-[0.9375rem] font-semibold uppercase tracking-[0.04em]">
+                {step.title}
+              </h3>
+            </div>
+            <p class="max-w-[65ch] text-[0.9375rem] leading-[1.65] text-muted-foreground text-pretty">
+              {step.body}
             </p>
-            <h3 class="mt-2 text-[0.9375rem] font-semibold uppercase tracking-[0.04em]">
-              {step.title}
-            </h3>
-            <p class="mt-2 text-sm leading-[1.6] text-muted-foreground text-pretty">{step.body}</p>
           </li>
         ))
       }
     </ol>
-
-    <div class="reveal mt-16 border-t border-border pt-12 md:mt-20 md:pt-14">
-      <h3
-        class="mx-auto max-w-[38ch] text-center font-semibold text-[clamp(1.25rem,2.5vw,1.75rem)] leading-[1.35] tracking-[-0.015em] text-balance"
-      >
-        We publish the limits along with the results, and we fix what the evidence contradicts.
-      </h3>
-    </div>
   </section>
 
   {

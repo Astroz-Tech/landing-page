@@ -2,6 +2,7 @@ export const site = {
   name: "Astroz",
   description: "A community for people who want to build software in the open.",
   email: "axelomatthew.terang@gmail.com",
+  donate: "https://qrco.de/bh4PW4",
   social: {
     x: "https://x.com/XhunterX330924",
     github: "https://github.com/Astroz-Tech",
